@@ -20,7 +20,7 @@ with ui.sidebar(title="Filter controls"):
         selected=["Adelie", "Gentoo", "Chinstrap"],
     )
 
-
+#TODO: Rename header and all title
 with ui.layout_column_wrap(fill=False):
     with ui.value_box(showcase=icon_svg("earlybirds")):
         "Number of penguins"
@@ -43,11 +43,12 @@ with ui.layout_column_wrap(fill=False):
         def bill_depth():
             return f"{filtered_df()['bill_depth_mm'].mean():.1f} mm"
 
-
+#TODO: Rename header and all title
 with ui.layout_columns():
     with ui.card(full_screen=True):
         ui.card_header("Bill length and depth")
 
+        #TODO: Change plot to display good vs bad results
         @render.plot
         def length_depth():
             return sns.scatterplot(
@@ -74,7 +75,7 @@ with ui.layout_columns():
 
 ui.include_css(app_dir / "styles.css")
 
-
+#TODO: Define filter on inseason pred data: Exemple: team, date
 @reactive.calc
 def filtered_df():
     filt_df = df[df["species"].isin(input.species())]
