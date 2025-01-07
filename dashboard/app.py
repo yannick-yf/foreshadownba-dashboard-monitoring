@@ -9,7 +9,7 @@ from shared import app_dir, df
 from shiny import reactive
 from shiny.express import input, render, ui
 
-ui.page_opts(title="Penguins dashboard", fillable=True)
+ui.page_opts(title="Foreshadownba prediction dashboard", fillable=True)
 
 with ui.sidebar(title="Filter controls"):
     ui.input_slider("mass", "Mass", 2000, 6000, 6000)
@@ -23,25 +23,25 @@ with ui.sidebar(title="Filter controls"):
 #TODO: Rename header and all title
 with ui.layout_column_wrap(fill=False):
     with ui.value_box(showcase=icon_svg("earlybirds")):
-        "Number of penguins"
+        "Current season total games"
 
         @render.text
         def count():
-            return filtered_df().shape[0]
+            return 333 #filtered_df().shape[0]
 
     with ui.value_box(showcase=icon_svg("ruler-horizontal")):
-        "Average bill length"
+        "Total games correctly predicted"
 
         @render.text
         def bill_length():
-            return f"{filtered_df()['bill_length_mm'].mean():.1f} mm"
+            return 200 #f"{filtered_df()['bill_length_mm'].mean():.1f} mm"
 
     with ui.value_box(showcase=icon_svg("ruler-vertical")):
-        "Average bill depth"
+        "Inseason Accuracy"
 
         @render.text
         def bill_depth():
-            return f"{filtered_df()['bill_depth_mm'].mean():.1f} mm"
+            return f"{60:.1f}%" #f"{filtered_df()['bill_depth_mm'].mean():.1f} mm"
 
 #TODO: Rename header and all title
 with ui.layout_columns():
