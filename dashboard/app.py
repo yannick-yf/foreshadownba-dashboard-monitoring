@@ -1,5 +1,5 @@
 #cmd: shiny run --reload --launch-browser  dashboard/app.py
-
+# List icon: https://fontawesome.com/v6/icons/circle-check?f=classic&s=solid
 import seaborn as sns
 from faicons import icon_svg
 
@@ -14,37 +14,37 @@ from shiny.express import input, render, ui
 
 ui.page_opts(title="Foreshadownba prediction dashboard", fillable=True)
 
-with ui.sidebar(title="Filter controls"):
-    ui.input_slider("mass", "Mass", 2000, 6000, 6000)
-    ui.input_checkbox_group(
-        "species",
-        "Species",
-        ["Adelie", "Gentoo", "Chinstrap"],
-        selected=["Adelie", "Gentoo", "Chinstrap"],
-    )
+# with ui.sidebar(title="Filter controls"):
+#     ui.input_slider("mass", "Mass", 2000, 6000, 6000)
+#     ui.input_checkbox_group(
+#         "species",
+#         "Species",
+#         ["Adelie", "Gentoo", "Chinstrap"],
+#         selected=["Adelie", "Gentoo", "Chinstrap"],
+#     )
 
 #TODO: Rename header and all title
 with ui.layout_column_wrap(fill=False):
-    with ui.value_box(showcase=icon_svg("ruler-horizontal")):
+    with ui.value_box(showcase=icon_svg(name="circle-check",style="solid")):
         "Games Correctly Predicted"
 
         @render.text
         def correctly_predicted():
             return season_accuracy['sum_row_accuracy'].values[0]
 
-    with ui.value_box(showcase=icon_svg("earlybirds")):
+    with ui.value_box(showcase=icon_svg(name="circle-check",style="regular")):
         "Total Number of Games"
 
         @render.text
         def nb_games_total():
             return season_accuracy['row_count'].values[0]
 
-    with ui.value_box(showcase=icon_svg("ruler-vertical")):
+    with ui.value_box(showcase=icon_svg(name="bullseye",style="solid")):
         "Inseason Accuracy"
 
         @render.text
         def inseason_accuracy():
-            return f"{round(season_accuracy['season_accuracy']*100,2)[0]}%" #f"{60:.1f}%" #f"{filtered_df()['bill_depth_mm'].mean():.1f} mm"
+            return f"{round(season_accuracy['season_accuracy']*100,2)[0]}%"
 
 #TODO: Rename header and all title
 with ui.layout_columns():
