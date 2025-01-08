@@ -4,7 +4,7 @@ import seaborn as sns
 from faicons import icon_svg
 
 # Import data from shared.py
-from shared import app_dir, df
+from shared import app_dir, df, nba_games_inseasonn_w_pred, daily_accuracy, season_accuracy
 
 from shiny import reactive
 from shiny.express import input, render, ui
@@ -22,26 +22,26 @@ with ui.sidebar(title="Filter controls"):
 
 #TODO: Rename header and all title
 with ui.layout_column_wrap(fill=False):
-    with ui.value_box(showcase=icon_svg("earlybirds")):
-        "Current season total games"
-
-        @render.text
-        def count():
-            return 333 #filtered_df().shape[0]
-
     with ui.value_box(showcase=icon_svg("ruler-horizontal")):
-        "Total games correctly predicted"
+        "Games Correctly Predicted"
 
         @render.text
-        def bill_length():
-            return 200 #f"{filtered_df()['bill_length_mm'].mean():.1f} mm"
+        def correctly_predicted():
+            return season_accuracy['sum_row_accuracy'].values[0]
+
+    with ui.value_box(showcase=icon_svg("earlybirds")):
+        "Total Number of Games"
+
+        @render.text
+        def nb_games_total():
+            return season_accuracy['row_count'].values[0]
 
     with ui.value_box(showcase=icon_svg("ruler-vertical")):
         "Inseason Accuracy"
 
         @render.text
-        def bill_depth():
-            return f"{60:.1f}%" #f"{filtered_df()['bill_depth_mm'].mean():.1f} mm"
+        def inseason_accuracy():
+            return f"{round(season_accuracy['season_accuracy']*100,2)[0]}%" #f"{60:.1f}%" #f"{filtered_df()['bill_depth_mm'].mean():.1f} mm"
 
 #TODO: Rename header and all title
 with ui.layout_columns():
@@ -59,18 +59,11 @@ with ui.layout_columns():
             )
 
     with ui.card(full_screen=True):
-        ui.card_header("Penguin data")
+        ui.card_header("NBA games data")
 
         @render.data_frame
         def summary_statistics():
-            cols = [
-                "species",
-                "island",
-                "bill_length_mm",
-                "bill_depth_mm",
-                "body_mass_g",
-            ]
-            return render.DataGrid(filtered_df()[cols], filters=True)
+            return render.DataGrid(nba_games_inseasonn_w_pred, filters=True)
 
 
 ui.include_css(app_dir / "styles.css")
