@@ -5,6 +5,9 @@ from faicons import icon_svg
 
 # Import data from shared.py
 from shared import app_dir, df, nba_games_inseasonn_w_pred, daily_accuracy, season_accuracy
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
+import matplotlib.pyplot as plt
 
 from shiny import reactive
 from shiny.express import input, render, ui
@@ -46,17 +49,22 @@ with ui.layout_column_wrap(fill=False):
 #TODO: Rename header and all title
 with ui.layout_columns():
     with ui.card(full_screen=True):
-        ui.card_header("Bill length and depth")
+        ui.card_header("Confusion Matrix of NBA Games Prediction")
 
         #TODO: Change plot to display good vs bad results
         @render.plot
-        def length_depth():
-            return sns.scatterplot(
-                data=filtered_df(),
-                x="bill_length_mm",
-                y="bill_depth_mm",
-                hue="species",
+        def confusion_matrix_shiny():
+            cm = confusion_matrix(
+                nba_games_inseasonn_w_pred['results'], 
+                nba_games_inseasonn_w_pred['prediction_value']
             )
+
+            disp = ConfusionMatrixDisplay(
+                confusion_matrix=cm
+            )
+            disp.plot(cmap=plt.cm.Blues)
+
+            return plt.gcf()
 
     with ui.card(full_screen=True):
         ui.card_header("NBA games data")

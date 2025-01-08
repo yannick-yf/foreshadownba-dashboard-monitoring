@@ -15,6 +15,7 @@ htmltools = "0.6.0"
 python-dotenv  = "1.0.1"
 faicons = "*"
 seaborn = "*"
+scikit-learn = "1.6.0"
 
 [tool.poetry.dev-dependencies]
 coverage = {extras = ["toml"], version = "6.5.*"}
