@@ -4,7 +4,7 @@ import seaborn as sns
 from faicons import icon_svg
 
 # Import data from shared.py
-from shared import app_dir, df, nba_games_inseasonn_w_pred, daily_accuracy, season_accuracy
+from shared import app_dir, nba_games_inseasonn_w_pred, daily_accuracy, season_accuracy
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 import matplotlib.pyplot as plt
