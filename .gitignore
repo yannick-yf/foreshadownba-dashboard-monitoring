@@ -173,4 +173,3 @@ cython_debug/
 *.ipynb
 notebooks/
 .vscode/
-notebooks/load_s3_data.ipynb
