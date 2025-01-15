@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - chore/**
   pull_request:
     branches:
       - main
@@ -35,8 +36,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@
       - uses: actions/checkout@v4
       - name: Install Poetry
         run: pipx install poetry
