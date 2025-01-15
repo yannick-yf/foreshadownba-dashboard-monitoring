@@ -8,7 +8,6 @@ on:
   pull_request:
     branches:
       - main
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -30,7 +29,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-central-1
         run: poetry run pytest tests/test_shared.py 
-
   deploy:
     needs: test
     runs-on: ubuntu-latest
