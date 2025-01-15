@@ -1,2 +1,2 @@
 # foreshadownba-dashboard-monitoring
-Monitoring Dashboard from ForeshadowNBA pipelines
+Shiny Monitoring Dashboard from ForeshadowNBA model prediction
