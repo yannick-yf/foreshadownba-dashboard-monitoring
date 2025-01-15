@@ -3,7 +3,6 @@
 import seaborn as sns
 from faicons import icon_svg
 
-# Import data from shared.py
 from shared import app_dir, nba_games_inseasonn_w_pred, daily_accuracy, season_accuracy
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
@@ -71,7 +70,7 @@ with ui.layout_columns():
 
         @render.data_frame
         def summary_statistics():
-            return render.DataGrid(nba_games_inseasonn_w_pred, filters=True)
+            return render.DataGrid(nba_games_inseasonn_w_pred.sort_values(by='game_date', ascending=False), filters=True)
 
 
 ui.include_css(app_dir / "styles.css")
