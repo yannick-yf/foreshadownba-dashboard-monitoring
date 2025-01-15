@@ -169,3 +169,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+*.ipynb
+notebooks/
+.vscode/
+notebooks/load_s3_data.ipynb
