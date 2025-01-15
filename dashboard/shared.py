@@ -95,8 +95,8 @@ def calculate_season_accuracy(nba_games: pd.DataFrame) -> pd.DataFrame:
 app_dir = Path(__file__).parent
 bucket_name = 'foreshadownba'
 file_key = 'inference-pipeline-output/nba_games_inseasonn_w_pred.csv'
-my_profile_name = 'ipfy'
-os.environ['AWS_PROFILE'] = my_profile_name
+# my_profile_name = 'ipfy'
+# os.environ['AWS_PROFILE'] = my_profile_name
 
 # Get Data
 nba_games_inseasonn_w_pred = prepare_nba_games_data(load_data_from_s3(bucket_name, file_key))
