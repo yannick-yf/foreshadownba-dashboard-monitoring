@@ -81,12 +81,10 @@ with ui.layout_column_wrap(fill=False):
         def inseason_accuracy():
             return f"{round(season_accuracy['season_accuracy']*100,2)[0]}%"
 
-#TODO: Rename header and all title
 with ui.layout_columns():
     with ui.card(full_screen=True):
         ui.card_header("Confusion Matrix of NBA Games Prediction")
 
-        #TODO: Change plot to display good vs bad results
         @render.plot
         def confusion_matrix_shiny():
             cm = confusion_matrix(
