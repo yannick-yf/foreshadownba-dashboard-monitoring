@@ -5,21 +5,25 @@ import boto3
 from io import StringIO
 import os
 
+
 def setup_aws_credentials():
     """
     Set up AWS credentials for boto3 based on the environment.
     """
-    my_profile_name = 'ipfy'
+    my_profile_name = "ipfy"
 
     # Check if running locally or in CI/CD
-    if os.getenv('GITHUB_ACTIONS'):
-        print("Running in GitHub Actions. Using environment variables for AWS credentials.")
+    if os.getenv("GITHUB_ACTIONS"):
+        print(
+            "Running in GitHub Actions. Using environment variables for AWS credentials."
+        )
         # Ensure the environment variables are set in GitHub Actions:
         # AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN (if needed)
         # No further action needed, boto3 will pick these up.
     else:
         print(f"Running locally. Using AWS profile: {my_profile_name}")
-        os.environ['AWS_PROFILE'] = my_profile_name
+        os.environ["AWS_PROFILE"] = my_profile_name
+
 
 def load_data_from_s3(bucket_name, file_key):
     """
@@ -33,14 +37,15 @@ def load_data_from_s3(bucket_name, file_key):
         pd.DataFrame: Loaded DataFrame.
     """
     # Initialize the S3 client
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client("s3")
 
     # Download the file from S3 into a memory buffer
     response = s3_client.get_object(Bucket=bucket_name, Key=file_key)
-    file_content = response['Body'].read().decode('utf-8')
+    file_content = response["Body"].read().decode("utf-8")
 
     # Read the CSV content into a pandas DataFrame
     return pd.read_csv(StringIO(file_content))
+
 
 def load_data(file_path):
     """
@@ -54,6 +59,7 @@ def load_data(file_path):
     """
     return pd.read_csv(file_path)
 
+
 def prepare_nba_games_data(nba_games: pd.DataFrame) -> pd.DataFrame:
     """
     Load and prepare NBA games data for analysis.
@@ -64,14 +70,15 @@ def prepare_nba_games_data(nba_games: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Prepared DataFrame with additional columns and formatted dates.
     """
-    nba_games = nba_games[['id', 'id_season', 'game_date', 'tm', 'opp', 'results', 'prediction_value']]
-    nba_games['row_accuracy'] = np.where(
-        nba_games['results'] == nba_games['prediction_value'], 
-        1, 
-        0
+    nba_games = nba_games[
+        ["id", "id_season", "game_date", "tm", "opp", "results", "prediction_value"]
+    ]
+    nba_games["row_accuracy"] = np.where(
+        nba_games["results"] == nba_games["prediction_value"], 1, 0
     )
-    nba_games['game_date'] = pd.to_datetime(nba_games['game_date'])
+    nba_games["game_date"] = pd.to_datetime(nba_games["game_date"])
     return nba_games
+
 
 def calculate_daily_accuracy(nba_games: pd.DataFrame) -> pd.DataFrame:
     """
@@ -83,12 +90,16 @@ def calculate_daily_accuracy(nba_games: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame containing daily accuracy.
     """
-    daily_accuracy = nba_games.groupby('game_date').agg(
-        row_count=('id', 'count'),
-        sum_row_accuracy=('row_accuracy', 'sum')
-    ).reset_index()
-    daily_accuracy['daily_accuracy'] = daily_accuracy['sum_row_accuracy'] / daily_accuracy['row_count']
+    daily_accuracy = (
+        nba_games.groupby("game_date")
+        .agg(row_count=("id", "count"), sum_row_accuracy=("row_accuracy", "sum"))
+        .reset_index()
+    )
+    daily_accuracy["daily_accuracy"] = (
+        daily_accuracy["sum_row_accuracy"] / daily_accuracy["row_count"]
+    )
     return daily_accuracy
+
 
 def calculate_season_accuracy(nba_games: pd.DataFrame) -> pd.DataFrame:
     """
@@ -100,22 +111,28 @@ def calculate_season_accuracy(nba_games: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame containing season accuracy.
     """
-    season_accuracy = nba_games.groupby('id_season').agg(
-        row_count=('id', 'count'),
-        sum_row_accuracy=('row_accuracy', 'sum')
-    ).reset_index()
-    season_accuracy['season_accuracy'] = season_accuracy['sum_row_accuracy'] / season_accuracy['row_count']
+    season_accuracy = (
+        nba_games.groupby("id_season")
+        .agg(row_count=("id", "count"), sum_row_accuracy=("row_accuracy", "sum"))
+        .reset_index()
+    )
+    season_accuracy["season_accuracy"] = (
+        season_accuracy["sum_row_accuracy"] / season_accuracy["row_count"]
+    )
     return season_accuracy
+
 
 # Constants
 app_dir = Path(__file__).parent
-bucket_name = 'foreshadownba'
-file_key = 'inference-pipeline-output/nba_games_inseasonn_w_pred.csv'
+bucket_name = "foreshadownba"
+file_key = "inference-pipeline-output/nba_games_inseasonn_w_pred.csv"
 
 # Setup AWS credentials
 setup_aws_credentials()
 
 # Get Data
-nba_games_inseasonn_w_pred = prepare_nba_games_data(load_data_from_s3(bucket_name, file_key))
+nba_games_inseasonn_w_pred = prepare_nba_games_data(
+    load_data_from_s3(bucket_name, file_key)
+)
 daily_accuracy = calculate_daily_accuracy(nba_games_inseasonn_w_pred)
 season_accuracy = calculate_season_accuracy(nba_games_inseasonn_w_pred)
