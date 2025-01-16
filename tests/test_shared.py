@@ -5,6 +5,7 @@ import pandas as pd
 from pathlib import Path
 
 from dashboard.shared import (
+    setup_aws_credentials,
     load_data,
     load_data_from_s3,
     prepare_nba_games_data,
@@ -22,8 +23,7 @@ SAMPLE_NBA_GAMES ="""id,id_season,game_date,tm,opp,results,prediction_value,pred
 2024-11-01_SAC_ATL,2025,2024-11-01,ATL,SAC,0,1,1,0.5302031,0.4697969,0.49553776,0.50446224
 """
 
-# my_profile_name = 'ipfy'
-# os.environ['AWS_PROFILE'] = my_profile_name
+setup_aws_credentials()
 
 def test_load_data_from_s3():
     bucket_name = 'foreshadownba'
