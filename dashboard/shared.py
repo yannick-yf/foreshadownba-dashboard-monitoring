@@ -5,6 +5,22 @@ import boto3
 from io import StringIO
 import os
 
+def setup_aws_credentials():
+    """
+    Set up AWS credentials for boto3 based on the environment.
+    """
+    my_profile_name = 'ipfy'
+
+    # Check if running locally or in CI/CD
+    if os.getenv('GITHUB_ACTIONS'):
+        print("Running in GitHub Actions. Using environment variables for AWS credentials.")
+        # Ensure the environment variables are set in GitHub Actions:
+        # AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN (if needed)
+        # No further action needed, boto3 will pick these up.
+    else:
+        print(f"Running locally. Using AWS profile: {my_profile_name}")
+        os.environ['AWS_PROFILE'] = my_profile_name
+
 def load_data_from_s3(bucket_name, file_key):
     """
     Load a CSV file from an S3 bucket into a pandas DataFrame.
@@ -95,8 +111,9 @@ def calculate_season_accuracy(nba_games: pd.DataFrame) -> pd.DataFrame:
 app_dir = Path(__file__).parent
 bucket_name = 'foreshadownba'
 file_key = 'inference-pipeline-output/nba_games_inseasonn_w_pred.csv'
-# my_profile_name = 'ipfy'
-# os.environ['AWS_PROFILE'] = my_profile_name
+
+# Setup AWS credentials
+setup_aws_credentials()
 
 # Get Data
 nba_games_inseasonn_w_pred = prepare_nba_games_data(load_data_from_s3(bucket_name, file_key))
